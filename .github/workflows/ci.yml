@@ -5,6 +5,22 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to test"
+        type: choice
+        options: [int, stg, prod]
+        default: int
+      browser:
+        description: "Browser (safari = WebKit)"
+        type: choice
+        options: [chrome, firefox, safari]
+        default: chrome
+      test_type:
+        description: "Which tests to run"
+        type: choice
+        options: [all, smoke, regression]
+        default: all
 
 jobs:
   test:
@@ -17,17 +33,30 @@ jobs:
           python-version: "3.13"
           cache: pip
 
+      - name: Pick browser (chrome -> chromium, safari -> webkit)
+        run: |
+          case "${{ inputs.browser }}" in
+            firefox) echo "BROWSER=firefox" >> $GITHUB_ENV ;;
+            safari)  echo "BROWSER=webkit" >> $GITHUB_ENV ;;
+            *)       echo "BROWSER=chromium" >> $GITHUB_ENV ;;
+          esac
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          playwright install --with-deps chromium
+          playwright install --with-deps $BROWSER
 
       - name: Run smoke tests (fast gate)
-        run: pytest -m smoke
+        if: inputs.test_type != 'regression'
+        run: pytest -m smoke --browser $BROWSER
+        env:
+          TEST_ENV: ${{ inputs.environment || 'int' }}
 
       - name: Run remaining tests
-        run: pytest -m "not smoke"
+        if: inputs.test_type != 'smoke'
+        run: pytest -m "not smoke" --browser $BROWSER
         env:
+          TEST_ENV: ${{ inputs.environment || 'int' }}
           # Optional: if set, the password is read from Vault (see framework/config/secrets.py)
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
