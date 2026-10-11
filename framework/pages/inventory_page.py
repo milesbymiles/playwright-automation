@@ -20,4 +20,9 @@ class InventoryPage(BasePage):
         self.select_option(L.SORT_DROPDOWN, option_text)
 
     def get_product_names(self) -> list[str]:
+        self.wait_for_visible(L.PRODUCT_NAMES)  # all_inner_texts() does not auto-wait
         return self.get_all_texts(L.PRODUCT_NAMES)
+
+    def get_product_prices(self) -> list[str]:
+        self.wait_for_visible(L.PRODUCT_PRICES)
+        return self.get_all_texts(L.PRODUCT_PRICES)

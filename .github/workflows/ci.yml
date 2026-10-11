@@ -14,7 +14,7 @@ on:
       browser:
         description: "Browser (safari = WebKit)"
         type: choice
-        options: [chrome, firefox, safari]
+        options: [chrome, firefox, safari, all]
         default: chrome
       test_type:
         description: "Which tests to run"
@@ -36,25 +36,28 @@ jobs:
       - name: Pick browser (chrome -> chromium, safari -> webkit)
         run: |
           case "${{ inputs.browser }}" in
-            firefox) echo "BROWSER=firefox" >> $GITHUB_ENV ;;
-            safari)  echo "BROWSER=webkit" >> $GITHUB_ENV ;;
-            *)       echo "BROWSER=chromium" >> $GITHUB_ENV ;;
+            firefox) INSTALL=firefox;  ARGS="--browser firefox" ;;
+            safari)  INSTALL=webkit;   ARGS="--browser webkit" ;;
+            all)     INSTALL="chromium firefox webkit"; ARGS="--all-browsers" ;;
+            *)       INSTALL=chromium; ARGS="--browser chromium" ;;
           esac
+          echo "INSTALL_BROWSERS=$INSTALL" >> $GITHUB_ENV
+          echo "BROWSER_ARGS=$ARGS" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          playwright install --with-deps $BROWSER
+          playwright install --with-deps $INSTALL_BROWSERS
 
       - name: Run smoke tests (fast gate)
         if: inputs.test_type != 'regression'
-        run: pytest -m smoke --browser $BROWSER
+        run: pytest -m smoke $BROWSER_ARGS
         env:
           TEST_ENV: ${{ inputs.environment || 'int' }}
 
       - name: Run remaining tests
         if: inputs.test_type != 'smoke'
-        run: pytest -m "not smoke" --browser $BROWSER
+        run: pytest -m "not smoke" $BROWSER_ARGS
         env:
           TEST_ENV: ${{ inputs.environment || 'int' }}
           # Optional: if set, the password is read from Vault (see framework/config/secrets.py)

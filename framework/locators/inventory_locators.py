@@ -10,3 +10,4 @@ class InventoryLocators:
 
     SORT_DROPDOWN = "[data-test='product-sort-container']"
     PRODUCT_NAMES = ".inventory_item_name"
+    PRODUCT_PRICES = ".inventory_item_price"

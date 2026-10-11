@@ -23,7 +23,7 @@ class BasePage:
         return self.page.locator(selector).all_inner_texts()
 
     def wait_for_visible(self, selector: str):
-        self.page.locator(selector).wait_for(state="visible")
+        self.page.locator(selector).first.wait_for(state="visible")  # .first: selector may match many elements
 
     def select_option(self, selector: str, visible_text: str):
         # Works for a normal HTML <select> dropdown: pick an option by the text the user sees
