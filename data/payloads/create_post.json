@@ -1,0 +1,5 @@
+{
+  "title": "Post created from payload file",
+  "body": "This body comes from data/payloads/create_post.json",
+  "userId": 1
+}

@@ -1,0 +1,6 @@
+{
+  "id": 1,
+  "title": "Post updated from payload file",
+  "body": "This body comes from data/payloads/update_post.json",
+  "userId": 1
+}

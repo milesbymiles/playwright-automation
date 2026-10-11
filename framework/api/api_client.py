@@ -14,3 +14,9 @@ class ApiClient:
         return self.request.post(
             "/posts", data={"title": title, "body": body, "userId": user_id}
         )
+
+    def create_post_with_payload(self, payload: dict) -> APIResponse:
+        return self.request.post("/posts", data=payload)
+
+    def update_post(self, post_id: int, payload: dict) -> APIResponse:
+        return self.request.put(f"/posts/{post_id}", data=payload)
