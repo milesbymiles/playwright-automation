@@ -1,4 +1,3 @@
-import allure
 import pytest
 
 from framework.api.api_client import ApiClient
@@ -64,18 +63,3 @@ def api_client(playwright):
     request_context = playwright.request.new_context(base_url=API_BASE_URL)
     yield ApiClient(request_context)
     request_context.dispose()
-
-
-# ---------- Attach a screenshot to the Allure report when a UI test fails ----------
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    report = outcome.get_result()
-    if report.when == "call" and report.failed:
-        page = item.funcargs.get("page")
-        if page:
-            allure.attach(
-                page.screenshot(),
-                name="failure-screenshot",
-                attachment_type=allure.attachment_type.PNG,
-            )

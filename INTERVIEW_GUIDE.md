@@ -3,7 +3,7 @@
 ## 30-second pitch
 "It's a Python Playwright framework using pytest-bdd. Test cases are written in Gherkin so anyone can read them.
 Each step calls a Page Object, and selectors live in a separate locators layer. It covers UI and API with the
-same tool, produces HTML and Allure reports with screenshots and traces on failure, runs in GitHub Actions on
+same tool, produces an HTML report, with screenshots and Playwright traces saved on failure, runs in GitHub Actions on
 every push, and I use Playwright MCP with an AI assistant to explore pages, find locators and draft scenarios -
 always reviewed by me before commit."
 
@@ -39,6 +39,6 @@ Rule of thumb: **locators = where, pages = how, steps = what + verify, features 
 - **How do you avoid flaky tests?** Playwright auto-waits, stable selectors (data-test ids), independent tests, no sleeps, traces to diagnose.
 - **How do you scale it?** `pytest-xdist` for parallel runs (`pytest -n 4`), tags to split smoke/regression, sharding in CI.
 - **How do you share login across tests?** Playwright storage state (save once, reuse), or API login then inject the token.
-- **Where would you add more?** Test data factories, retries for known-flaky external calls, Allure history, Docker image, Slack notifications.
+- **Where would you add more?** Test data factories, retries for known-flaky external calls, an Allure report, Docker image, Slack notifications.
 - **What does MCP do here?** Lets an AI assistant operate a real browser to find locators, draft Gherkin and debug failures. Human reviews everything; CI runs only committed code.
 - **How are secrets handled?** Env vars locally, GitHub Actions secrets in CI. The demo credentials here are public.

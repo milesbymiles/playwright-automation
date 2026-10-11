@@ -1,7 +1,7 @@
 # Python Playwright BDD Framework (UI + API)
 
 Simple, interview-friendly framework using **Python, Playwright, pytest-bdd (Gherkin), Page Object Model,
-Allure + HTML reports, GitHub Actions, and Playwright MCP**.
+HTML reports + Playwright trace viewer, GitHub Actions, and Playwright MCP**.
 
 Practice sites: UI = https://www.saucedemo.com , API = https://jsonplaceholder.typicode.com
 
@@ -42,6 +42,5 @@ pytest --browser firefox  # other browser
 
 ## Reports
 - HTML: `reports/report.html` (open in a browser)
-- Allure: `allure serve reports/allure-results` (needs Allure CLI: https://allurereport.org/docs/install/)
-- Failed UI tests: screenshot attached to Allure, Playwright trace in `reports/artifacts/`
+- Failed UI tests: screenshot and Playwright trace saved in `reports/artifacts/`
   (view with `playwright show-trace <trace.zip>`)
