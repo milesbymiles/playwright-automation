@@ -8,8 +8,8 @@ MCP is a **design-time helper**, not part of the test run. The tests themselves 
 deterministic Python + Playwright. The AI helps us author and maintain them faster:
 
 1. **Explore** - "Open https://www.saucedemo.com and log in as standard_user."
-2. **Find locators** - "Give me stable selectors for the login form." -> we paste them into `framework/locators/`.
-3. **Draft scenarios** - "Write a Gherkin scenario for adding an item to the cart." -> a human reviews it, then it goes into `features/`.
+2. **Find locators** - "Give me stable selectors for the login form." -> we paste them into `locators/`.
+3. **Draft scenarios** - "Draft a pytest test for adding an item to the cart." -> a human reviews it, then it goes into `tests/`.
 4. **Debug failures** - "This step failed in CI, open the page and tell me what changed."
 
 ## Guardrails

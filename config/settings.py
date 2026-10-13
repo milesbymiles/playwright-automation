@@ -1,7 +1,7 @@
 """One place for all configuration. Override with environment variables in CI."""
 import os
 
-from framework.config.secrets import get_secret
+from config.secrets import get_secret
 
 # Pick the environment with TEST_ENV=int|stg|prod (default: int)
 # NOTE: the practice sites have only one environment, so all three point to the same URLs.

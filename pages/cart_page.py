@@ -1,5 +1,5 @@
-from framework.locators.cart_locators import CartLocators as L
-from framework.pages.base_page import BasePage
+from locators.cart_locators import CartLocators as L
+from pages.base_page import BasePage
 
 
 class CartPage(BasePage):

@@ -1,23 +1,12 @@
 import pytest
 
-from framework.api.api_client import ApiClient
-from framework.config.settings import API_BASE_URL
-from framework.pages.cart_page import CartPage
-from framework.pages.inventory_page import InventoryPage
-from framework.pages.login_page import LoginPage
-
-# Register the step files so every feature can use them
-pytest_plugins = [
-    "tests.steps.common_steps",
-    "tests.steps.login_steps",
-    "tests.steps.cart_steps",
-    "tests.steps.sort_steps",
-    "tests.steps.excel_steps",
-    "tests.steps.api_steps",
-]
+from config.settings import API_BASE_URL, PASSWORD
+from pages.cart_page import CartPage
+from pages.inventory_page import InventoryPage
+from pages.login_page import LoginPage
 
 
-# ---------- Run every test on all browsers (parametrization) ----------
+# ---------- Run every test on all browsers: pytest --all-browsers ----------
 ALL_BROWSERS = ["chromium", "firefox", "webkit"]  # webkit = Safari engine
 
 
@@ -26,19 +15,9 @@ def pytest_addoption(parser):
 
 
 def pytest_configure(config):
-    # pytest-playwright creates one test per name in the --browser list (it parametrizes `browser_name`).
-    # So filling that list is all we need to run each test 3 times.
+    # pytest-playwright runs each test once per name in the --browser list
     if config.getoption("--all-browsers"):
         config.option.browser = ALL_BROWSERS
-
-
-@pytest.hookimpl(tryfirst=True)
-def pytest_generate_tests(metafunc):
-    # pytest-playwright only parametrizes tests that list `page` in their arguments.
-    # BDD tests get `page` indirectly (through the step fixtures), so we add `browser_name`
-    # ourselves for every @ui test. The plugin then creates one test per browser.
-    if metafunc.definition.get_closest_marker("ui") and "browser_name" not in metafunc.fixturenames:
-        metafunc.fixturenames.append("browser_name")
 
 
 # ---------- Page object fixtures (the "page" fixture comes from pytest-playwright) ----------
@@ -57,9 +36,17 @@ def cart_page(page):
     return CartPage(page)
 
 
-# ---------- API fixture ----------
 @pytest.fixture
-def api_client(playwright):
+def logged_in(page):
+    """Open the site and log in as standard_user."""
+    login_page = LoginPage(page)
+    login_page.open_login_page()
+    login_page.login("standard_user", PASSWORD)
+
+
+# ---------- API fixture: Playwright's request object, base URL already set ----------
+@pytest.fixture
+def api(playwright):
     request_context = playwright.request.new_context(base_url=API_BASE_URL)
-    yield ApiClient(request_context)
+    yield request_context
     request_context.dispose()

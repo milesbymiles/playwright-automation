@@ -1,5 +1,5 @@
-from framework.locators.inventory_locators import InventoryLocators as L
-from framework.pages.base_page import BasePage
+from locators.inventory_locators import InventoryLocators as L
+from pages.base_page import BasePage
 
 
 class InventoryPage(BasePage):

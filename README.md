@@ -1,27 +1,26 @@
-# Python Playwright BDD Framework (UI + API)
+# Python Playwright Framework (UI + API)
 
-Simple, interview-friendly framework using **Python, Playwright, pytest-bdd (Gherkin), Page Object Model,
-HTML reports + Playwright trace viewer, GitHub Actions, and Playwright MCP**.
+Simple, interview-friendly framework using **Python, pytest + pytest-playwright, Page Object Model,
+HTML report + Playwright trace viewer, GitHub Actions, and Playwright MCP**.
 
 Practice sites: UI = https://www.saucedemo.com , API = https://jsonplaceholder.typicode.com
 
 ## Structure
 ```
-features/            Gherkin .feature files (plain English test cases)
-  ui/login.feature, ui/cart.feature, api/posts.feature
 tests/
-  test_*.py          one line each: binds a feature file to pytest
-  steps/             step definitions (Gherkin sentence -> Python)
-framework/
-  locators/          selectors only (no logic)
-  pages/             Page Objects: actions only (no assertions)
-  api/               API client (Playwright APIRequestContext)
-  config/settings.py URLs and credentials (env-overridable)
-conftest.py          fixtures + failure-screenshot hook
+  ui/                test_login.py, test_cart.py, test_sort.py, test_products_excel.py
+  api/               test_posts.py (uses the `api` fixture from conftest)
+pages/               Page Objects: actions only (no assertions)
+locators/            selectors only (no logic)
+config/              settings.py (URLs, environments) + secrets.py (Vault -> env var)
+utils/               data_loader.py (JSON), excel_util.py (Excel)
+data/                payloads/ (JSON) and test_data/ (Excel)
+conftest.py          fixtures (page objects, api, logged_in) + --all-browsers
+pytest.ini           markers and report/trace options
 .github/workflows/   CI pipeline
 mcp/ + .mcp.json     Playwright MCP setup and guide
 ```
-Flow: `feature file -> step definition -> page object -> locators -> browser`
+Flow: `test -> page object -> locators -> browser`  (assertions live in the test)
 
 ## Setup
 ```bash
@@ -33,11 +32,12 @@ playwright install chromium
 ## Run
 ```bash
 pytest                    # everything
-pytest -m smoke           # only @smoke scenarios
+pytest -m smoke           # only smoke tests
 pytest -m ui              # only UI
 pytest -m api             # only API
 pytest --headed           # watch the browser
 pytest --browser firefox  # other browser
+pytest --all-browsers     # chromium + firefox + webkit
 ```
 
 ## Reports

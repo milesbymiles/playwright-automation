@@ -3,7 +3,7 @@ from pathlib import Path
 
 from openpyxl import Workbook, load_workbook
 
-from framework.utils.data_loader import DATA_DIR
+from utils.data_loader import DATA_DIR
 
 
 def read_sheet(file_name: str, sheet_name: str) -> list[dict]:

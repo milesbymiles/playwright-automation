@@ -1,4 +1,4 @@
-name: Playwright BDD Tests
+name: Playwright Tests
 
 on:
   push:
@@ -60,7 +60,7 @@ jobs:
         run: pytest -m "not smoke" $BROWSER_ARGS
         env:
           TEST_ENV: ${{ inputs.environment || 'int' }}
-          # Optional: if set, the password is read from Vault (see framework/config/secrets.py)
+          # Optional: if set, the password is read from Vault (see config/secrets.py)
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
 

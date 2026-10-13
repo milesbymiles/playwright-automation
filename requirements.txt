@@ -1,6 +1,5 @@
 pytest>=8.0
 pytest-playwright>=0.5
-pytest-bdd>=8.0
 pytest-html>=4.1
 hvac>=2.0
 openpyxl>=3.1

@@ -1,6 +1,6 @@
-from framework.config.settings import UI_BASE_URL
-from framework.locators.login_locators import LoginLocators as L
-from framework.pages.base_page import BasePage
+from config.settings import UI_BASE_URL
+from locators.login_locators import LoginLocators as L
+from pages.base_page import BasePage
 
 
 class LoginPage(BasePage):
